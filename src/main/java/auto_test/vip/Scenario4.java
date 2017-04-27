@@ -18,16 +18,16 @@ public class Scenario4 {
 		ApiClient testAPiclient = new ApiClient();
 		testAPiclient.setBasePath("http://vip.creatis.insa-lyon.fr/rest");
 		testAPiclient.setApiKey(apiKey);
-		DefaultApi defaultApiClient3 = new DefaultApi(testAPiclient);
+		DefaultApi defaultApiClient4 = new DefaultApi(testAPiclient);
 				
 		System.out.println("***************************************************");
 		
 		//execution history
-		System.out.println(defaultApiClient3.listExecutions());
+		System.out.println(defaultApiClient4.listExecutions());
 		System.out.println("***************************************************");
 		
 		//check a particular execution
-		String result = defaultApiClient3.getExecution("workflow-ulum4P").toString();
+		String result = defaultApiClient4.getExecution("workflow-ulum4P").toString();
 		System.out.println(result);
 		System.out.println("***************************************************");
 		
@@ -41,15 +41,15 @@ public class Scenario4 {
 		
 		if(testSplit[27].equals("finished\n")){
 			//to get result file name
-			System.out.println(defaultApiClient3.getExecutionResults("workflow-PvlSwI", ""));
+			System.out.println(defaultApiClient4.getExecutionResults("workflow-PvlSwI", ""));
 			System.out.println("***************************************************");
 			
 			//to get stdout
-			System.out.println(defaultApiClient3.getStdout("workflow-PvlSwI"));
+			System.out.println(defaultApiClient4.getStdout("workflow-PvlSwI"));
 			System.out.println("***************************************************");
 			
 			//to get stderr
-			System.out.println(defaultApiClient3.getStderr("workflow-PvlSwI"));
+			System.out.println(defaultApiClient4.getStderr("workflow-PvlSwI"));
 			System.out.println("***************************************************");
 		}
 		
