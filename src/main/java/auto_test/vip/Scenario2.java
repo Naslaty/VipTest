@@ -7,6 +7,14 @@ import io.swagger.client.api.DefaultApi;
 import io.swagger.client.model.Execution;
 
 public class Scenario2 {
+	
+	public DefaultApi initClient(String url, String apiKey){
+		ApiClient testAPiclient = new ApiClient();
+		testAPiclient.setBasePath(url);
+		testAPiclient.setApiKey(apiKey);
+		return new DefaultApi(testAPiclient);
+	}
+	
 	public static void main(String[] args) throws Exception{
 		
 		//apiKey is an keyboard input
@@ -14,28 +22,20 @@ public class Scenario2 {
 		System.out.println("Please enter your Apikey: ");
 		String apiKey = sc.nextLine();
 		System.out.println("You entered: " + apiKey);
+		sc.close();
 		
 		//Client initialization
-		ApiClient testAPiclient = new ApiClient();
-		testAPiclient.setBasePath("http://vip.creatis.insa-lyon.fr/rest");
-		testAPiclient.setApiKey(apiKey);
-		DefaultApi defaultApiClient2 = new DefaultApi(testAPiclient);
+		DefaultApi defaultApiClient2 = new Scenario2().initClient("http://vip.creatis.insa-lyon.fr/rest", apiKey);
 		
 		//execution history
 		System.out.println(defaultApiClient2.listExecutions());
 		
 		//check a particular execution
-		String result = defaultApiClient2.getExecution("workflow-ulum4P").toString();
-		System.out.println(result);
+		Execution result1 = defaultApiClient2.getExecution("workflow-ulum4P");
+		System.out.println(result1);
 		System.out.println("***************************************************");
 		
-		System.out.println("*************TEST SPLIT 1*****************");
-		String[] testSplit = result.split(" ");
-		for(int i=0; i<testSplit.length; i++){
-			System.out.print("tab["+i+"]: "+testSplit[i]);
-		}
-		
-		System.out.println("old name: "+testSplit[12]+",	old timeout: "+testSplit[22]);
+		System.out.println("old name: "+result1.getName()+",	old timeout: "+result1.getTimeout());
 		
 		
 		System.out.println("***************************************************");
@@ -48,21 +48,14 @@ public class Scenario2 {
 		defaultApiClient2.updateExecution("workflow-ulum4P", body);
 		
 		//check execution modification
-		result = defaultApiClient2.getExecution("workflow-ulum4P").toString();
-		System.out.println(result);
+		Execution result2 = defaultApiClient2.getExecution("workflow-ulum4P");
+		System.out.println(result2);
 		System.out.println("***************************************************");
 		
-		System.out.println("*************TEST SPLIT 1*****************");
-		String[] newTestSplit = result.split(" ");
-		for(int i=0; i<newTestSplit.length; i++){
-			System.out.print("tab["+i+"]: "+newTestSplit[i]);
-		}
+		System.out.println("new name: "+result2.getName()+",	new timeout: "+result2.getTimeout());
 		
-		System.out.println("new name: "+newTestSplit[12]+",	new timeout: "+newTestSplit[22]);
+		Boolean test = !(result1.getName().equals(result2.getName())) || !(result1.getTimeout().equals(result2.getTimeout())); 
 		
-		Boolean test1 = !(testSplit[12].equals(newTestSplit[12])) || !(testSplit[22].equals(newTestSplit[22])); 
-		//Boolean test2 = (testSplit[22].equals(newTestSplit[22]));
-		
-		System.out.println("modification existance test: "+test1);
+		System.out.println("modification existance test: "+test);
 	}
 }

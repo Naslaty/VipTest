@@ -4,8 +4,17 @@ import java.util.Scanner;
 
 import io.swagger.client.ApiClient;
 import io.swagger.client.api.DefaultApi;
+import io.swagger.client.model.Execution;
 
 public class Scenario4 {
+	
+	public DefaultApi initClient(String url, String apiKey){
+		ApiClient testAPiclient = new ApiClient();
+		testAPiclient.setBasePath(url);
+		testAPiclient.setApiKey(apiKey);
+		return new DefaultApi(testAPiclient);
+	}
+	
 	public static void main(String[] args) throws Exception{
 		
 		//apiKey is an keyboard input
@@ -13,13 +22,10 @@ public class Scenario4 {
 		System.out.println("Please enter your Apikey: ");
 		String apiKey = sc.nextLine();
 		System.out.println("You entered: " + apiKey);
+		sc.close();
 		
 		//Client initialization
-		ApiClient testAPiclient = new ApiClient();
-		testAPiclient.setBasePath("http://vip.creatis.insa-lyon.fr/rest");
-		testAPiclient.setApiKey(apiKey);
-		DefaultApi defaultApiClient4 = new DefaultApi(testAPiclient);
-				
+		DefaultApi defaultApiClient4 = new Scenario4().initClient("http://vip.creatis.insa-lyon.fr/rest", apiKey);				
 		System.out.println("***************************************************");
 		
 		//execution history
@@ -27,19 +33,11 @@ public class Scenario4 {
 		System.out.println("***************************************************");
 		
 		//check a particular execution
-		String result = defaultApiClient4.getExecution("workflow-ulum4P").toString();
+		Execution result = defaultApiClient4.getExecution("workflow-ulum4P");
 		System.out.println(result);
 		System.out.println("***************************************************");
 		
-		System.out.println("*************TEST SPLIT 1*****************");
-		String[] testSplit = result.split(" ");
-		for(int i=0; i<testSplit.length; i++){
-			System.out.print("tab["+i+"]: "+testSplit[i]);
-		}
-		
-		System.out.print("tab[27]:"+testSplit[27]);
-		
-		if(testSplit[27].equals("finished\n")){
+		if(result.getStatus().toString().equals("finished")){
 			//to get result file name
 			System.out.println(defaultApiClient4.getExecutionResults("workflow-PvlSwI", ""));
 			System.out.println("***************************************************");
@@ -54,7 +52,7 @@ public class Scenario4 {
 		}
 		
 		else{
-			System.out.println("the execution is running");
+			System.out.println("the execution is not finished");
 		}
 	}
 }

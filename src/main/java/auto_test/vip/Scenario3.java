@@ -10,6 +10,13 @@ import io.swagger.client.model.Execution;
 
 public class Scenario3 {
 	
+	public DefaultApi initClient(String url, String apiKey){
+		ApiClient testAPiclient = new ApiClient();
+		testAPiclient.setBasePath(url);
+		testAPiclient.setApiKey(apiKey);
+		return new DefaultApi(testAPiclient);
+	}
+	
 	public static void main(String args[])throws Exception{
 		
 		//apiKey is an keyboard input
@@ -17,13 +24,10 @@ public class Scenario3 {
 		System.out.println("Please enter your Apikey: ");
 		String apiKey = sc.nextLine();
 		System.out.println("You entered: " + apiKey);
+		sc.close();
 		
 		//Client initialization
-		ApiClient testAPiclient = new ApiClient();
-		testAPiclient.setBasePath("http://vip.creatis.insa-lyon.fr/rest");
-		testAPiclient.setApiKey(apiKey);
-		DefaultApi defaultApiClient3 = new DefaultApi(testAPiclient);
-		
+		DefaultApi defaultApiClient3 = new Scenario3().initClient("http://vip.creatis.insa-lyon.fr/rest", apiKey);		
 		System.out.println("***************************************************");
 		
 		//execution history
@@ -31,8 +35,16 @@ public class Scenario3 {
 		System.out.println("***************************************************");
 		
 		//kill a crashed execution
-		defaultApiClient3.killExecution("workflow-IfcK9B");
+		defaultApiClient3.killExecution("workflow-y1pUxG");
 		System.out.println("***************************************************");
+		
+		//check the execution
+		System.out.println("test URL /executions/{execution identifier}, method GET, action: print information about the specified execution");
+		Execution result = defaultApiClient3.getExecution("workflow-IfcK9B");
+		System.out.println("result: "+result);
+		System.out.println("****************************************");
+		
+		Boolean test1 = result.getStatus().toString().equals("killed");
 		
 		//create and restart the execution
 		Execution body = new Execution();
@@ -42,7 +54,14 @@ public class Scenario3 {
 		sc3.put("number1", 1);
 		sc3.put("number2", 2);
 		body.setInputValues(sc3);
-		System.out.println(defaultApiClient3.initAndStartExecution(body));
+		result = defaultApiClient3.initAndStartExecution(body);
+		System.out.println("result: "+result);
 		System.out.println("***************************************************");
+
+		Boolean test2 = result.getStatus().toString().equals("running");
+		
+		Boolean test = test1 && test2;
+		
+		System.out.println("final result: "+test);
 	}
 }
