@@ -1,15 +1,33 @@
 package auto_test.vip;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
+import java.util.Properties;
 
 import io.swagger.client.ApiClient;
 import io.swagger.client.api.DefaultApi;
 import io.swagger.client.model.Execution;
 
-
 public class Scenario1 {
+	
+	public Properties propertiesExtraction() throws Exception{
+		Properties prop = new Properties();
+		try{
+			FileInputStream in = new FileInputStream("src/main/resources/testVip.properties");
+			try{
+				prop.load(in);
+				in.close();
+			}catch(IOException ioe){
+				System.out.println(ioe.getMessage());
+			}
+		}catch(FileNotFoundException fnfe){
+			System.out.println(fnfe.getMessage());
+		}
+		return prop;
+	}
 	
 	public Execution initExecution(String name, String pipelineIdentifier, int n1, int n2){
 		Execution testExe = new Execution();
@@ -32,17 +50,13 @@ public class Scenario1 {
 	
 	public static void main(String[] args) throws Exception{
 		
-		// Properties prop = new Properties("viptest.properties");
+		Scenario1 scenario1 = new Scenario1();
 		
-		//apiKey is an keyboard input
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Please enter your Apikey: ");
-		String apiKey = sc.nextLine();
-		System.out.println("You entered: " + apiKey);
-		sc.close();
+		//properties extraction
+		Properties prop = scenario1.propertiesExtraction();
 		
 		//Client initialization
-		DefaultApi defaultApiClient1 = new Scenario1().initClient("http://vip.creatis.insa-lyon.fr/rest", apiKey);
+		DefaultApi defaultApiClient1 = scenario1.initClient(prop.getProperty("url"), prop.getProperty("apiKey"));
 		
 		//pipelines list
 		System.out.println("test URL  /pipelines, method GET, action: print the pipelines list");
@@ -56,7 +70,7 @@ public class Scenario1 {
 		
 		//create and start an execution
 		System.out.println("test URL /executions/create-and-start, method POST, action: initialize an execution and start it ==> WORK");
-		Execution result = defaultApiClient1.initAndStartExecution(new Scenario1().initExecution("test_334", "AdditionTest/0.9", 40, 41));
+		Execution result = defaultApiClient1.initAndStartExecution(scenario1.initExecution("test_335", "AdditionTest/0.9", 40, 41));
 		System.out.println("result: "+result);
 		System.out.println("****************************************");
 				
@@ -65,13 +79,15 @@ public class Scenario1 {
 		System.out.println("result: "+defaultApiClient1.getExecution(result.getIdentifier()));
 		System.out.println("****************************************");
 		
-		Thread.sleep(6000);
+		while(result.getStatus().toString().equals("running")){
+			Thread.sleep(60000);
 		
-		//check the execution
-		System.out.println("test URL /executions/{execution identifier}, method GET, action: print information about the specified execution");
-		result = defaultApiClient1.getExecution(result.getIdentifier());
-		System.out.println("result: "+result);
-		System.out.println("****************************************");
+			//check the execution
+			System.out.println("test URL /executions/{execution identifier}, method GET, action: print information about the specified execution");
+			result = defaultApiClient1.getExecution(result.getIdentifier());
+			System.out.println("result: "+result);
+			System.out.println("****************************************");
+		}
 		
 		Boolean test = result.getStatus().toString().equals("finished");
 		

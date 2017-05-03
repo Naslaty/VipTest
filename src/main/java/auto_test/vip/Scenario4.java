@@ -1,12 +1,31 @@
 package auto_test.vip;
 
-import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 import io.swagger.client.ApiClient;
 import io.swagger.client.api.DefaultApi;
 import io.swagger.client.model.Execution;
 
 public class Scenario4 {
+	
+	public Properties propertiesExtraction() throws Exception{
+		Properties prop = new Properties();
+		try{
+			FileInputStream in = new FileInputStream("src/main/resources/testVip.properties");
+			try{
+				prop.load(in);
+				in.close();
+			}catch(IOException ioe){
+				System.out.println(ioe.getMessage());
+			}
+		}catch(FileNotFoundException fnfe){
+			System.out.println(fnfe.getMessage());
+		}
+		return prop;
+	}
 	
 	public DefaultApi initClient(String url, String apiKey){
 		ApiClient testAPiclient = new ApiClient();
@@ -17,15 +36,13 @@ public class Scenario4 {
 	
 	public static void main(String[] args) throws Exception{
 		
-		//apiKey is an keyboard input
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Please enter your Apikey: ");
-		String apiKey = sc.nextLine();
-		System.out.println("You entered: " + apiKey);
-		sc.close();
+		Scenario4 scenario4 = new Scenario4();
+		
+		//properties extraction
+		Properties prop = scenario4.propertiesExtraction();
 		
 		//Client initialization
-		DefaultApi defaultApiClient4 = new Scenario4().initClient("http://vip.creatis.insa-lyon.fr/rest", apiKey);				
+		DefaultApi defaultApiClient4 = scenario4.initClient(prop.getProperty("url"), prop.getProperty("apiKey"));				
 		System.out.println("***************************************************");
 		
 		//execution history
