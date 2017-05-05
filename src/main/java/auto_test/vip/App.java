@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 
 import io.swagger.client.ApiClient;
 import io.swagger.client.api.DefaultApi;
@@ -55,8 +56,26 @@ public class App
 		body.setPipelineIdentifier(pipelineIdentifier);
 		return body;
 	}
-		public static void main(String[] args) throws Exception{
-			// TODO Auto-generated method stub
+	
+	public String randomSelection(){
+    	int i, j = 40 ;
+    	char[] table = new char[83];
+    	char aleaChar;
+    	String aleaName = "";
+    	
+    	// fill the character table
+    	for(i = 0; i<83;i++){
+    		table[i] = (char)j;
+    		j++;
+    	}
+    	//System.out.println(table);
 
-		}
+    	for(i=0; i<15;i++){
+	    	Random randomer = new Random();
+	    	int indice = randomer.nextInt(table.length);
+	    	aleaChar = table[indice];
+	    	aleaName += aleaChar;
+    	}
+    	return aleaName;
+	}
 }

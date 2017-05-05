@@ -11,10 +11,44 @@
   <url>http://maven.apache.org</url>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
   <build>
+  	<plugins>
+  		<plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>build-helper-maven-plugin</artifactId>
+	        <version>1.10</version>
+	        <executions>
+	        	<execution>
+		            <id>add_sources</id>
+		            <phase>generate-sources</phase>
+		            <goals>
+		            	<goal>add-source</goal>
+		            </goals>
+		            <configuration>
+		            	<sources>
+		                	<source>src/main/java</source>
+		              	</sources>
+		            </configuration>
+	          	</execution>
+	          	<execution>
+		            <id>add_test_sources</id>
+		            <phase>generate-test-sources</phase>
+		            <goals>
+		            	<goal>add-test-source</goal>
+		            </goals>
+		            <configuration>
+		            	<sources>
+		                	<source>src/test/java</source>
+		            	</sources>
+		            </configuration>
+	          	</execution>
+	        </executions>
+		</plugin>
+	</plugins>
+     
   	<resources>
   		<resource>
   			<directory> src/main/resources </directory>
@@ -23,16 +57,16 @@
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
+  	<dependency>
+    	<groupId>junit</groupId>
+      	<artifactId>junit</artifactId>
+      	<version>4.12</version>
+      	<scope>test</scope>
     </dependency>
     <dependency>
-     <groupId>io.swagger</groupId>
-     <artifactId>swagger-java-client</artifactId>
-     <version>1.0</version>
-	</dependency> 
+   		<groupId>io.swagger</groupId>
+     	<artifactId>new-swagger-java-client</artifactId>
+     	<version>1.1</version>
+    </dependency> 
   </dependencies>
 </project>
