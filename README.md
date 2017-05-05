@@ -10,3 +10,4 @@ Source code is composed of different VIP use cases.
 # Use
 First of all, you need to sign up on the VIP portal.
 After the registration you have to use your own apikey to laucnh one of the use cases.
+You have to put your api key in src.main/resources.
