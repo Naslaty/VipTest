@@ -14,7 +14,7 @@ public class Scenario {
 	public boolean scenario1() throws Exception{	
 		//properties extraction
 		Properties prop = appScenario.propertiesExtraction();
-		
+//		System.getProperty();
 		//Client initialization
 		DefaultApi defaultApiClient1 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), prop.getProperty("viptest.additiontest.apikey"));
 		
@@ -117,12 +117,12 @@ public class Scenario {
 	
 	
 	// try to modify but put the same name and the same timeout
-	public boolean scenario5() throws Exception{	
+	public boolean scenario5(String key) throws Exception{	
 		// properties extraction
 		Properties prop = appScenario.propertiesExtraction();
 		
 		//Client initialization
-		DefaultApi defaultApiClient5 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), prop.getProperty("viptest.additiontest.apikey"));
+		DefaultApi defaultApiClient5 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);
 		
 		//execution history
 		System.out.println(defaultApiClient5.listExecutions());

@@ -8,6 +8,9 @@ import junit.framework.TestSuite;
  * Unit test for simple App.
  */
 public class AppTest extends TestCase{
+	
+	private String apikey = System.getProperty("apikey");
+
     /**
      * Create the test case
      *
@@ -56,18 +59,20 @@ public class AppTest extends TestCase{
      * @throws Exception 
      */
     public void testAppScenario5() throws Exception{
+    	
+//    	String apikey = "8l01stauurr4dv72ahnfpncj2o"; 
     	Scenario scenarioTest5 = new Scenario();
-        assertFalse(scenarioTest5.scenario5());
+        assertFalse(scenarioTest5.scenario5(apikey));
     }
     
-    /**
-     * Rigourous Test scenario 6:-)
-     * @throws Exception 
-     */
-    public void testAppScenario6() throws Exception{
-    	Scenario scenarioTest6 = new Scenario();
-        assertFalse(scenarioTest6.scenario6());
-    }
+//    /**
+//     * Rigourous Test scenario 6:-)
+//     * @throws Exception 
+//     */
+//    public void testAppScenario6() throws Exception{
+//    	Scenario scenarioTest6 = new Scenario();
+//        assertFalse(scenarioTest6.scenario6());
+//    }
     
 
 }
