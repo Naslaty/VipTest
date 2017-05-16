@@ -68,12 +68,12 @@
       </plugin>
    	 </plugins>
     </reporting> -->
-    <repositories>
+<!--     <repositories>
       <repository>
          <id>localrepository</id>
          <url>${user.home}.m2/repository</url>
       </repository>
-   </repositories>
+   </repositories> -->
 
   <dependencies>
   	<dependency>
