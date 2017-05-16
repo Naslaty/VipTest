@@ -98,7 +98,7 @@ public class Scenario {
 	}
 	
 	
-	
+	// try to modify but put the same name and the same timeout
 	public boolean scenario5() throws Exception{	
 		// properties extraction
 		Properties prop = appScenario.propertiesExtraction();
