@@ -11,12 +11,13 @@ import io.swagger.client.model.Execution;
 
 public class Scenario {
 		App appScenario = new App();
-	public boolean scenario1() throws Exception{	
+	
+		public boolean scenario1(String key) throws Exception{	
 		//properties extraction
 		Properties prop = appScenario.propertiesExtraction();
 //		System.getProperty();
 		//Client initialization
-		DefaultApi defaultApiClient1 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), prop.getProperty("viptest.additiontest.apikey"));
+		DefaultApi defaultApiClient1 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);
 		
 		//pipelines list
 		System.out.println(defaultApiClient1.listPipelines(""));
@@ -42,12 +43,12 @@ public class Scenario {
 		return result.getStatus().toString().equals("finished");
 	}
 
-	public boolean scenario2() throws Exception{	
+	public boolean scenario2(String key) throws Exception{	
 		// properties extraction
 		Properties prop = appScenario.propertiesExtraction();
 		
 		//Client initialization
-		DefaultApi defaultApiClient2 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), prop.getProperty("viptest.additiontest.apikey"));
+		DefaultApi defaultApiClient2 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);
 		
 		//execution history
 		//System.out.println(defaultApiClient2.listExecutions());
@@ -68,12 +69,12 @@ public class Scenario {
 		return !(result1.getName().equals(result2.getName())) || !(result1.getTimeout().equals(result2.getTimeout()));
 	}
 	
-	public boolean scenario3() throws Exception{
+	public boolean scenario3(String key) throws Exception{
 		// properties extraction
 		Properties prop = appScenario.propertiesExtraction();
 		
 		//Client initialization
-		DefaultApi defaultApiClient3 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), prop.getProperty("viptest.additiontest.apikey"));		
+		DefaultApi defaultApiClient3 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);		
 		
 		//create and restart the execution
 		Execution body = appScenario.initExecution("newScenarioKo", "AdditionTest/0.9", 1, 2);
@@ -92,9 +93,6 @@ public class Scenario {
 			//System.out.println("Identifier: "+e.getIdentifier()+"  status: "+e.getStatus());
 		}
 		
-		//kill a crashed execution
-		//defaultApiClient3.killExecution("workflow-y1pUxG");
-		
 		//check the execution
 		result = defaultApiClient3.getExecution(resId);
 		//System.out.println("result: "+result);
@@ -104,7 +102,8 @@ public class Scenario {
 		//create and restart the execution
 		body = appScenario.initExecution("newScenario3", "AdditionTest/0.9", 1, 2);
 		result = defaultApiClient3.initAndStartExecution(body);
-		//System.out.println("result: "+result);
+		resId = result.getIdentifier();
+		defaultApiClient3.killExecution(resId);
 
 		boolean test2 = result.getStatus().toString().equals("running");
 		//System.out.println(test1 + " " + test2);
@@ -143,22 +142,23 @@ public class Scenario {
 	}
 	
 	// try to launch two Execution without good right
-	public boolean scenario6() throws Exception{	
+	public boolean scenario6(String key) throws Exception{	
 		// properties extraction
 		Properties prop = appScenario.propertiesExtraction();
 		
 		//Client initialization
-		DefaultApi defaultApiClient6 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), prop.getProperty("viptest.additiontest.apikey"));
+		DefaultApi defaultApiClient6 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);
 		
 		//create and start an execution
 		Execution body = appScenario.initExecution("newScenario3", "AdditionTest/0.9", 1, 2);
 		Execution result = defaultApiClient6.initAndStartExecution(body);
-		
+		String resId = result.getIdentifier(); 
 		//create and start another execution
 		try{
 		body = appScenario.initExecution("newScenario3", "AdditionTest/0.9", 1, 2);
 		result = defaultApiClient6.initAndStartExecution(body);
 		}catch(ApiException ae){
+			defaultApiClient6.killExecution(resId);
 			return false;
 		}
 		
