@@ -14,7 +14,7 @@ import io.swagger.client.model.Execution;
 
 public class App 
 {
-	public Properties propertiesExtraction() throws Exception{
+	public Properties propertiesExtraction(){
 		Properties prop = new Properties();
 		try{
 			FileInputStream in = new FileInputStream("src/main/resources/testVipAdditiontest.properties");
