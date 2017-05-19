@@ -96,29 +96,25 @@ public class Scenario {
 	public boolean scenario4(String key) throws Exception{
 		//Client initialization
 		DefaultApi defaultApiClient4 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);
-		Execution[] tab = new Execution[10];
-		//System.out.println("Step 1");
-		//execution history
-		List<Execution> list = defaultApiClient4.listExecutions();
-		//System.out.println("Step 2");
-		int i=0;
-		Iterator<Execution> it = list.iterator();
-		//System.out.println("Step 3");
-		while(it.hasNext() && i<10){
-			//System.out.println("Step 4."+i);
-			Execution e= (Execution) it.next();
-			//System.out.println(e.getStatus()+"	"+e.getStatus().equals("finished")+" 	"+e.getStatus().toString().equals("finished"));
-			if(e.getStatus().toString().equals("finished")){ // A TRAVAILLER
-				tab[i] = e;
-				i++;
-			}
-		}		
-		//System.out.println(defaultApiClient4.getExecution(tab[5].getIdentifier()));
+
+		boolean bool = true;
+		String exeId = null;
+		//delete phase initialization
 		DeleteExecutionConfiguration body = new DeleteExecutionConfiguration();
 		body.setDeleteFiles(true);
-		defaultApiClient4.deleteExecution(tab[5].getIdentifier(), body);
-		//System.out.println(defaultApiClient4.getExecution(tab[5].getIdentifier()));
-		return false;
+
+		//execution history
+		Iterator<Execution> list = defaultApiClient4.listExecutions().iterator();
+		while(list.hasNext() && bool){
+			Execution e= (Execution) list.next();
+			if(e.getStatus().toString().equals("finished") && defaultApiClient4.getExecution(e.getIdentifier())!=null){ 
+				exeId = e.getIdentifier();
+				defaultApiClient4.deleteExecution(exeId, body);
+				bool = false;
+			}
+		}
+
+		return defaultApiClient4.getExecution(exeId)==null;
 	}
 	
 	//tries to modify an execution but put the same name and the same timeout so NO modification
@@ -128,7 +124,6 @@ public class Scenario {
 		
 		//execution history
 		String exeId = defaultApiClient5.listExecutions().iterator().next().getIdentifier();
-		System.out.println(defaultApiClient5.listExecutions());
 		
 		//check a particular execution
 		Execution result1 = defaultApiClient5.getExecution(exeId);
