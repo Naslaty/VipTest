@@ -1,6 +1,5 @@
 package auto_test.vip;
 
-import java.util.List;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -26,7 +25,7 @@ public class Scenario {
 		defaultApiClient1.getPipeline(prop.getProperty("viptest.additiontest.pipelineidentifier"));
 		
 		//create and start an execution
-		Execution result = defaultApiClient1.initAndStartExecution(appScenario.initExecution("test_335", "AdditionTest/0.9", 40, 41));
+		Execution result = defaultApiClient1.initAndStartExecution(appScenario.initExecution("test_335", prop.getProperty("viptest.additiontest.pipelineidentifierString"), 40, 41));
 				
 		//keep the identifier
 		String exeId = result.getIdentifier();
@@ -53,7 +52,7 @@ public class Scenario {
 		
 		//modification of name parameter of the execution
 		String newName = appScenario.randomSelection();
-		Execution body = appScenario.modifExecution(newName, 0L, "AdditionTest/0.9");
+		Execution body = appScenario.modifExecution(newName, 0L, prop.getProperty("viptest.additiontest.pipelineidentifierString"));
 		defaultApiClient2.updateExecution(exeId, body);
 		
 		//check execution modification
@@ -68,7 +67,7 @@ public class Scenario {
 		DefaultApi defaultApiClient3 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);		
 		
 		//create and start the execution
-		Execution body = appScenario.initExecution("newScenarioKo", "AdditionTest/0.9", 1, 2);
+		Execution body = appScenario.initExecution("newScenarioKo", prop.getProperty("viptest.additiontest.pipelineidentifierString"), 1, 2);
 		Execution result = defaultApiClient3.initAndStartExecution(body);
 		String resId = result.getIdentifier();
 				
@@ -84,7 +83,7 @@ public class Scenario {
 		Boolean test1 = result.getStatus().toString().equals("killed");
 		
 		//create and restart the execution
-		body = appScenario.initExecution("newScenario3", "AdditionTest/0.9", 1, 2);
+		body = appScenario.initExecution("newScenario3", prop.getProperty("viptest.additiontest.pipelineidentifierString"), 1, 2);
 		result = defaultApiClient3.initAndStartExecution(body);
 		resId = result.getIdentifier();
 		defaultApiClient3.killExecution(resId);
@@ -93,6 +92,7 @@ public class Scenario {
 		return test1 && test2;
 	}
 	
+	// tries to delete the output file of an execution
 	public boolean scenario4(String key) throws Exception{
 		//Client initialization
 		DefaultApi defaultApiClient4 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);
@@ -122,14 +122,14 @@ public class Scenario {
 		//Client initialization
 		DefaultApi defaultApiClient5 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);
 		
-		//execution history
+		//find an execution to modify it
 		String exeId = defaultApiClient5.listExecutions().iterator().next().getIdentifier();
 		
 		//check a particular execution
 		Execution result1 = defaultApiClient5.getExecution(exeId);
 		
 		//modification of name parameter of the execution
-		Execution body = appScenario.modifExecution(result1.getName(), result1.getTimeout(), "AdditionTest/0.9");
+		Execution body = appScenario.modifExecution(result1.getName(), result1.getTimeout(), prop.getProperty("viptest.additiontest.pipelineidentifierString"));
 		defaultApiClient5.updateExecution(exeId, body);
 		
 		//check execution modification
@@ -144,12 +144,13 @@ public class Scenario {
 		DefaultApi defaultApiClient6 = appScenario.initClient(prop.getProperty("viptest.additiontest.url"), key);
 		
 		//create and start an execution
-		Execution body = appScenario.initExecution("newScenario3", "AdditionTest/0.9", 1, 2);
+		Execution body = appScenario.initExecution("newScenario3", prop.getProperty("viptest.additiontest.pipelineidentifierString"), 1, 2);
 		Execution result = defaultApiClient6.initAndStartExecution(body);
 		String resId = result.getIdentifier(); 
+		
 		//create and start another execution
 		try{
-		body = appScenario.initExecution("newScenario3", "AdditionTest/0.9", 1, 2);
+		body = appScenario.initExecution("newScenario3", prop.getProperty("viptest.additiontest.pipelineidentifierString"), 1, 2);
 		result = defaultApiClient6.initAndStartExecution(body);
 		}catch(ApiException ae){
 			defaultApiClient6.killExecution(resId);
