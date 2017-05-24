@@ -11,7 +11,7 @@ import io.swagger.client.model.Execution;
 
 public class Scenario {
 	private App appScenario = new App();
-	Properties prop = appScenario.propertiesExtraction();
+	private Properties prop = appScenario.propertiesExtraction();
 	
 	//tries to launch an execution an waits the end of it
 	public boolean scenario1(String key) throws Exception{	
