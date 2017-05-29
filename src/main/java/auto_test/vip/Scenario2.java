@@ -11,8 +11,8 @@ public class Scenario2 {
 		
 		String apikey = System.getProperty("apikey");
 		logger.debug("Launch scenario 2");
+		logger.info("waited result: true");
 		Scenario scenarioTest2 = new Scenario();
-		boolean result = scenarioTest2.scenario2(apikey);
-		logger.debug("Scenario 2 result: {}",result);
+		logger.info("Scenario 2 result: {}",scenarioTest2.scenario2(apikey));
 	}
 }
